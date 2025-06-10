@@ -18,41 +18,6 @@ hide_streamlit_style = """
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
-# st.markdown("""
-#         <style>
-#          /* Hover: border and text cyan */
-#         div.stButton > button:hover {
-#         border-color: #00ffff !important; /* cyan border */
-#         color: #00ffff !important;        /* cyan text */
-#         background-color: transparent !important;
-#         }
-
-#         /* Active (while clicking): cyan filled */
-#         div.stButton > button:active {
-#         background-color: #00ffff !important; /* cyan background */
-#         color: black !important;               /* white text */
-#         border-color: #00ffff !important;      /* cyan border */
-#         }
-
-#         /* Focus: same as hover, keep cyan border and text */
-#         div.stButton > button:focus-visible,
-#         div.stButton > button:focus {
-#         border-color: #00ffff !important;
-#         color: #00ffff !important;
-#         background-color: transparent ;
-#         outline: none !important;
-#         box-shadow: none !important;
-#         }
-            
-#         /* Remove default Streamlit focus ring and red border */
-#         input:focus-visible {
-#         border: 3px solid #00ffff !important;  /* Cyan border */
-#         box-shadow: none !important;           /* Remove glow */
-#         outline: none !important;              /* Remove default outline */
-#         }
-#         </style>
-#         """, unsafe_allow_html=True)
-
 if "page" not in st.session_state:
     st.session_state.page = "home"
 
@@ -162,8 +127,9 @@ def disease_prediction():
         # creating a button for Prediction
         if st.button('Diabetes Test Result'):
             if Pregnancies == '' or Glucose == '' or BloodPressure == '' or SkinThickness == '' or Insulin == '' or BMI == '' or DiabetesPedigreeFunction == '' or Age == '':
-                st.warning("⚠︎   Please enter all the fields")
-                st.stop()
+                st.info("ⓘ   Please enter all the fields")
+                time.sleep(1.5)
+                st.rerun()
                 
             diab_prediction = diabetes_model.predict([[Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin, BMI, DiabetesPedigreeFunction, Age]])
             if (diab_prediction[0] == 1):
@@ -174,7 +140,7 @@ def disease_prediction():
         # st.markdown("<br>", unsafe_allow_html=True)
 
         if st.session_state.get("Diabetesdiagnosis") == "positive":
-            st.error('⚠︎   The person is probably diabetic. Consulting a doctor is highly recommended')
+            st.error('⚠︎   The person is probably diabetic. Please consult a diabetologist.')
         elif st.session_state.get("Diabetesdiagnosis") == "negative":
             st.success('The person is not diabetic')
         
@@ -218,10 +184,195 @@ def disease_prediction():
     elif selected == "Heart Disease Detection":
         st.markdown("<h1 style='text-align: center;'>Heart Disease Detection</h1>", unsafe_allow_html=True)
         st.markdown("<br><br>", unsafe_allow_html=True)
+        
+        col1, col2, col3 = st.columns([1, 1, 1])
+
+        with col1:
+            age = st.text_input("Age", placeholder="1 - 120 years")
+            st.markdown("<br>", unsafe_allow_html=True)
+        with col2:
+            sex = st.text_input("Sex (0 = Female, 1 = Male)", placeholder="0 or 1")
+            st.markdown("<br>", unsafe_allow_html=True)
+        with col3:
+            cp = st.text_input("Chest Pain Type (0-3)", placeholder="0 - 3")
+            st.markdown("<br>", unsafe_allow_html=True)
+        with col1:
+            trestbps = st.text_input("Resting Blood Pressure", placeholder="80 - 200 mmHg")
+            st.markdown("<br>", unsafe_allow_html=True)
+        with col2:
+            chol = st.text_input("Serum Cholestoral", placeholder="60 - 600 mg/dL")
+            st.markdown("<br>", unsafe_allow_html=True)
+        with col3:
+            fbs = st.text_input("Fasting Blood Sugar > 120 mg/dL (1 = true, 0 = false)", placeholder="0 or 1")
+            st.markdown("<br>", unsafe_allow_html=True)
+        with col1:
+            restecg = st.text_input("Resting ECG Results (0-2)", placeholder="0 - 2")
+            st.markdown("<br>", unsafe_allow_html=True)
+        with col2:
+            thalach = st.text_input("Max Heart Rate Achieved", placeholder="60 - 210 bpm")
+            st.markdown("<br>", unsafe_allow_html=True)
+        with col3:
+            exang = st.text_input("Exercise Induced Angina (1 = yes; 0 = no)", placeholder="0 or 1")
+            st.markdown("<br>", unsafe_allow_html=True)
+        with col1:
+            oldpeak = st.text_input("ST depression induced by exercise", placeholder="0.0 - 6.0")
+            st.markdown("<br>", unsafe_allow_html=True)
+        with col2:
+            slope = st.text_input("Slope of the peak exercise ST segment (0-2)", placeholder="0 - 2")
+            st.markdown("<br>", unsafe_allow_html=True)
+        with col3:
+            ca = st.text_input("Number of major vessels colored by fluoroscopy (0-4)", placeholder="0 - 4")
+            st.markdown("<br>", unsafe_allow_html=True)
+        with col2:
+            thal = st.text_input("Thalassemia (1 = normal; 2 = fixed defect; 3 = reversible defect)", placeholder="1 - 3")
+            st.markdown("<br>", unsafe_allow_html=True)
+
+        # creating a button for Prediction
+        if st.button('Heart Disease Test Result'):
+            if age == '' or sex == '' or cp == '' or trestbps == '' or chol == '' or fbs == '' or restecg == '' or thalach == '' or exang == '' or oldpeak == '' or slope == '' or ca == '' or thal == '':
+                st.info("ⓘ   Please enter all the fields")
+                time.sleep(1.5)
+                st.rerun()
+
+            heart_prediction = heart_disease_model.predict([[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]])
+            if heart_prediction[0] == 1:
+                st.session_state["HeartDiagnosis"] = "positive"
+            else:
+                st.session_state["HeartDiagnosis"] = "negative"
+
+        if st.session_state.get("HeartDiagnosis") == "positive":
+            st.error('⚠︎   The person is likely to have heart disease. Please consult a cardiologist.')
+        elif st.session_state.get("HeartDiagnosis") == "negative":
+            st.success('The person does not show signs of heart disease.')
+
+        parameter_info = {
+        "Chest Pain Type": {"value": cp, "normal": (0, 1), "risk": (2, 3), "unit": ""},  # 0-typical angina to 3-asymptomatic
+        "Resting Blood Pressure": {"value": trestbps, "normal": (80, 120), "risk": (121, 139), "unit": "mmHg"},
+        "Serum Cholestoral": {"value": chol, "normal": (0, 200), "risk": (201, 240), "unit": "mg/dL"},
+        "Fasting Blood Sugar": {"value": fbs, "normal": (0, 0), "risk": (1, 1), "unit": ""},  # >120 mg/dL is risky
+        "Resting ECG": {"value": restecg, "normal": (0, 1), "risk": (2, 2), "unit": ""},
+        "Max Heart Rate Achieved": {"value": thalach, "normal": (60, 160), "risk": (161, 185), "unit": "bpm"},
+        "Exercise Induced Angina": {"value": exang, "normal": (0, 0), "risk": (1, 1), "unit": ""},
+        "ST depression induced by exercise": {"value": oldpeak, "normal": (0.0, 1.0), "risk": (1.1, 2.0), "unit": ""},
+        "Slope of the peak exercise ST segment": {"value": slope, "normal": (0, 1), "risk": (1, 2), "unit": ""},  # 0 = downsloping
+        "Number of major vessels colored by fluoroscopy": {"value": ca, "normal": (0, 0), "risk": (1, 2), "unit": ""},
+        "Thalassemia": {"value": thal, "normal": (1, 2), "risk": (3, 3), "unit": ""},  # 3 = reversible defect
+        }
+
+        if st.session_state.get("HeartDiagnosis") in ["positive", "negative"]:
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("View Report"):
+                for param, info in parameter_info.items():
+                    try:
+                        val = float(info["value"])
+                        normal_low, normal_high = info["normal"]
+                        risk_low, risk_high = info["risk"]
+
+                        if risk_high < val:
+                            st.error(f"⚠︎    {param}: {val} {info['unit']} — High risk")
+                        elif normal_low <= val <= normal_high:
+                            st.success(f" {param}: {val} {info['unit']} — Normal")
+                        elif risk_low <= val <= risk_high:
+                            st.warning(f"ⓘ   {param}: {val} {info['unit']} — Early warning for heart disease risk")
+                    except:
+                        st.warning(f"⚠︎ {param}: Invalid or missing input")
+
+                st.session_state["HeartDiagnosis"] = None
+        
+
+
+
+
+
 
     elif selected == "Parkinsons Detection":
         st.markdown("<h1 style='text-align: center;'>Parkinsons Detection</h1>", unsafe_allow_html=True)
         st.markdown("<br><br>", unsafe_allow_html=True)
+        
+        # Input fields
+        fields = [
+            "Fo(Hz)", "Fhi(Hz)", "Flo(Hz)", "Jitter(%)", "Jitter(Abs)", "RAP",
+            "PPQ", "DDP", "Shimmer", "Shimmer(dB)", "APQ3", "APQ5",
+            "APQ", "DDA", "NHR", "HNR", "RPDE", "DFA", "spread1", "spread2", "D2", "PPE"
+        ]
+
+        values = {}
+        col_count = 5
+        cols = st.columns(col_count)
+        
+        for idx, field in enumerate(fields):
+            with cols[idx % col_count]:
+                values[field] = st.text_input(field, placeholder="Enter value")
+                st.markdown("<br>", unsafe_allow_html=True)
+
+        if st.button('Parkinson Test Result'):
+            if any(val.strip() == '' for val in values.values()):
+                st.info("ⓘ   Please enter all the fields")
+                time.sleep(1.5)
+                st.rerun()
+                
+
+            input_data = [float(values[field]) for field in fields]
+            parkinsons_prediction = parkinsons_model.predict([input_data])
+
+            if parkinsons_prediction[0] == 1:
+                st.session_state["ParkinsonDiagnosis"] = "positive"
+            else:
+                st.session_state["ParkinsonDiagnosis"] = "negative"
+
+        if st.session_state.get("ParkinsonDiagnosis") == "positive":
+            st.error('⚠︎   The person is likely to have Parkinson’s disease. Please consult a neurologist.')
+        elif st.session_state.get("ParkinsonDiagnosis") == "negative":
+            st.success('The person is not likely to have Parkinson’s disease.')
+
+        # Report logic
+        parameter_info = {
+            "Fo(Hz)": {"value": values["Fo(Hz)"], "normal": (120, 160), "warning": (100, 119), "risk": (0, 99), "unit": "Hz"},
+            "Fhi(Hz)": {"value": values["Fhi(Hz)"], "normal": (180, 250), "warning": (251, 300), "risk": (301, 600), "unit": "Hz"},
+            "Flo(Hz)": {"value": values["Flo(Hz)"], "normal": (80, 110), "warning": (111, 130), "risk": (131, 300), "unit": "Hz"},
+            "Jitter(%)": {"value": values["Jitter(%)"], "normal": (0.0, 0.01), "warning": (0.011, 0.02), "risk": (0.021, 0.1), "unit": "%"},
+            "Jitter(Abs)": {"value": values["Jitter(Abs)"], "normal": (0.0, 0.00007), "warning": (0.000071, 0.0001), "risk": (0.00011, 0.001), "unit": ""},
+            "RAP": {"value": values["RAP"], "normal": (0.0, 0.005), "warning": (0.0051, 0.01), "risk": (0.011, 0.05), "unit": ""},
+            "PPQ": {"value": values["PPQ"], "normal": (0.0, 0.005), "warning": (0.0051, 0.01), "risk": (0.011, 0.05), "unit": ""},
+            "Jitter:DDP": {"value": values["DDP"], "normal": (0.0, 0.015), "warning": (0.016, 0.03), "risk": (0.031, 0.1), "unit": ""},
+            "Shimmer": {"value": values["Shimmer"], "normal": (0.0, 0.02), "warning": (0.021, 0.04), "risk": (0.041, 0.1), "unit": ""},
+            "Shimmer(dB)": {"value": values["Shimmer(dB)"], "normal": (0.0, 0.2), "warning": (0.21, 0.3), "risk": (0.31, 1.0), "unit": "dB"},
+            "APQ3": {"value": values["APQ3"], "normal": (0.0, 0.02), "warning": (0.021, 0.04), "risk": (0.041, 0.2), "unit": ""},
+            "APQ5": {"value": values["APQ5"], "normal": (0.0, 0.03), "warning": (0.031, 0.06), "risk": (0.061, 0.2), "unit": ""},
+            "APQ": {"value": values["APQ"], "normal": (0.0, 0.03), "warning": (0.031, 0.06), "risk": (0.061, 0.3), "unit": ""},
+            "DDA": {"value": values["DDA"], "normal": (0.0, 0.06), "warning": (0.061, 0.09), "risk": (0.091, 0.3), "unit": ""},
+            "NHR": {"value": values["NHR"], "normal": (0.0, 0.02), "warning": (0.021, 0.05), "risk": (0.051, 0.3), "unit": ""},
+            "HNR": {"value": values["HNR"], "normal": (20, 30), "warning": (15, 19), "risk": (0, 14), "unit": "dB"},
+            "RPDE": {"value": values["RPDE"], "normal": (0.2, 0.4), "warning": (0.41, 0.5), "risk": (0.51, 1.0), "unit": ""},
+            "DFA": {"value": values["DFA"], "normal": (0.5, 0.65), "warning": (0.66, 0.75), "risk": (0.76, 1.0), "unit": ""},
+            "spread1": {"value": values["spread1"], "normal": (-7, -4), "warning": (-10, -7.1), "risk": (-20, -10.1), "unit": ""},
+            "spread2": {"value": values["spread2"], "normal": (0.0, 0.2), "warning": (0.21, 0.3), "risk": (0.31, 1.0), "unit": ""},
+            "D2": {"value": values["D2"], "normal": (2.0, 2.5), "warning": (2.51, 3.0), "risk": (3.01, 5.0), "unit": ""},
+            "PPE": {"value": values["PPE"], "normal": (0.0, 0.2), "warning": (0.21, 0.3), "risk": (0.31, 1.0), "unit": ""}
+        }
+
+        if st.session_state.get("ParkinsonDiagnosis") in ["positive", "negative"]:
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("View Report"):
+                for param, info in parameter_info.items():
+                    try:
+                        val = float(info["value"])
+                        normal_low, normal_high = info["normal"]
+                        warning_low, warning_high = info["warning"]
+                        risk_low, risk_high = info["risk"]
+
+                        if risk_low <= val <= risk_high:
+                            st.error(f"⚠︎    {param}: {val} {info['unit']} — High risk")
+                        elif warning_low <= val <= warning_high:
+                            st.warning(f"ⓘ   {param}: {val} {info['unit']} — Early warning for Parkinson's disease risk")
+                        elif normal_low <= val <= normal_high:
+                            st.success(f"{param}: {val} {info['unit']} — Normal")
+                        else:
+                            st.warning(f"⚠︎ {param}: {val} {info['unit']} — Out of known range")
+                    except:
+                        st.warning(f"⚠︎ {param}: Invalid or missing input")
+
+                st.session_state["ParkinsonDiagnosis"] = None
     
 
 def doctor_directory():
