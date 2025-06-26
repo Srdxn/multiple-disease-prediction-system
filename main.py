@@ -51,8 +51,8 @@ def disease_prediction():
             display: none;
         }
     </style>
-"""
-st.markdown(hide_sidebar_toggle, unsafe_allow_html=True)
+    """
+    st.markdown(hide_sidebar_toggle, unsafe_allow_html=True)
 
 
     with st.sidebar:
