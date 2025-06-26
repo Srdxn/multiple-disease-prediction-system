@@ -18,6 +18,15 @@ hide_streamlit_style = """
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
+hide_sidebar_toggle = """
+    <style>
+        [data-testid="collapsedControl"] {
+            display: none;
+        }
+    </style>
+"""
+st.markdown(hide_sidebar_toggle, unsafe_allow_html=True)
+
 if "page" not in st.session_state:
     st.session_state.page = "home"
 
