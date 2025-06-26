@@ -5,7 +5,7 @@ import pickle
 import time
 import os
 
-st.set_page_config(page_title="Multiple Disease Prediction", layout="wide", initial_sidebar_state="auto")
+st.set_page_config(page_title="Multiple Disease Prediction", layout="wide", initial_sidebar_state="expanded")
 
 # Hide Streamlit's default menu and footer using CSS
 hide_streamlit_style = """
@@ -42,13 +42,19 @@ def disease_prediction():
         }
     }
     </style>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 
     hide_sidebar_toggle = """
     <style>
         [data-testid="collapsedControl"] {
             visibility: hidden;
+        }
+
+        section[data-testid="stSidebar"] {
+            min-width: 300px !important;
+            width: 300px !important;
+            flex-shrink: 0 !important;
         }
     </style>
     """
