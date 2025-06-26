@@ -51,11 +51,6 @@ def disease_prediction():
             visibility: hidden;
         }
 
-        section[data-testid="stSidebar"] {
-            min-width: 300px !important;
-            width: 300px !important;
-            flex-shrink: 0 !important;
-        }
     </style>
     """
     st.markdown(hide_sidebar_toggle, unsafe_allow_html=True)
