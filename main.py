@@ -48,7 +48,7 @@ def disease_prediction():
     hide_sidebar_toggle = """
     <style>
         [data-testid="collapsedControl"] {
-            display: none;
+            visibility: hidden;
         }
     </style>
     """
